@@ -97,25 +97,25 @@ class Trainline(object):
                 "departure_station_id": departure_station_id,
                 "systems": [
                     "sncf",
-                    "db",
-                    "idtgv",
-                    "ouigo",
-                    "trenitalia",
-                    "ntv",
-                    "hkx",
-                    "renfe",
-                    "cff",
-                    "benerail",
-                    "ocebo",
-                    "westbahn",
-                    "leoexpress",
-                    "locomore",
-                    "busbud",
-                    "flixbus",
-                    "distribusion",
-                    "cityairporttrain",
-                    "obb",
-                    "timetable"
+                    # "db",
+                    # "idtgv",
+                    # "ouigo",
+                    # "trenitalia",
+                    # "ntv",
+                    # "hkx",
+                    # "renfe",
+                    # "cff",
+                    # "benerail",
+                    # "ocebo",
+                    # "westbahn",
+                    # "leoexpress",
+                    # "locomore",
+                    # "busbud",
+                    # "flixbus",
+                    # "distribusion",
+                    # "cityairporttrain",
+                    # "obb",
+                    # "timetable"
                 ]
             }
         }
@@ -316,10 +316,10 @@ class Passenger(object):
 
         self.id = self._gen_id()
 
-        for card in cards:
-            if card not in _AVAILABLE_CARDS:
-                raise KeyError("Card '{}' unknown, [{}] available".format(
-                    card, ",".join(_AVAILABLE_CARDS)))
+        # for card in cards:
+        #     if card not in _AVAILABLE_CARDS:
+        #         raise KeyError("Card '{}' unknown, [{}] available".format(
+        #             card, ",".join(_AVAILABLE_CARDS)))
         self.cards = cards
 
     def _gen_id(self):
