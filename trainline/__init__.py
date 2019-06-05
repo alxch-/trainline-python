@@ -27,7 +27,7 @@ _DEFAULT_DATE_FORMAT = '%Y-%m-%dT%H:%M:%S%z'
 _BIRTHDATE_FORMAT = '%d/%m/%Y'
 _READABLE_DATE_FORMAT = "%d/%m/%Y %H:%M"
 _DEFAULT_SEARCH_TIMEZONE = 'Europe/Paris'
-_MAX_SERVER_RETRY = 3  # If a request is rejected, retry X times
+_MAX_SERVER_RETRY = 0  # If a request is rejected, retry X times
 _TIME_AFTER_FAILED_REQUEST = 10  # and wait Y seconds after a rejected request
 
 ENFANT_PLUS = "SNCF.CarteEnfantPlus"
@@ -78,6 +78,9 @@ class Client(object):
                 time.sleep(_TIME_AFTER_FAILED_REQUEST)
 
         if (ret.status_code != expected_status_code):
+            error_content=json.loads(ret.text)
+            if error_content.get('error') == "no_results":
+                raise ConnectionError("Aucun train trouvé.")
             raise ConnectionError(
                 'Status code {status} for url {url}\n{content}'.format(
                     status=ret.status_code, url=url, content=ret.text))
