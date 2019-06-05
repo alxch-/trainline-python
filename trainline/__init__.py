@@ -28,7 +28,7 @@ _BIRTHDATE_FORMAT = '%d/%m/%Y'
 _READABLE_DATE_FORMAT = "%d/%m/%Y %H:%M"
 _DEFAULT_SEARCH_TIMEZONE = 'Europe/Paris'
 _MAX_SERVER_RETRY = 0  # If a request is rejected, retry X times
-_TIME_AFTER_FAILED_REQUEST = 10  # and wait Y seconds after a rejected request
+_TIME_AFTER_FAILED_REQUEST = 0  # and wait Y seconds after a rejected request
 
 ENFANT_PLUS = "SNCF.CarteEnfantPlus"
 JEUNE = "SNCF.Carte1225"
@@ -79,7 +79,7 @@ class Client(object):
 
         if (ret.status_code != expected_status_code):
             error_content=json.loads(ret.text)
-            if error_content.get('error') == "no_results":
+            if error_content.get('code') == "no_results":
                 raise ConnectionError("Aucun train trouvé.")
             raise ConnectionError(
                 'Status code {status} for url {url}\n{content}'.format(
@@ -392,6 +392,7 @@ class Segment(object):
             "transportation_mean": str,
             "carrier": str,
             "train_number": str,
+            "train_name": str,
             "travel_class": str,
             "trip_id": str,
             "comfort_class_ids": list,
@@ -575,7 +576,8 @@ def search(departure_station, arrival_station,
            bicycle_without_reservation_only=None,
            bicycle_with_reservation_only=None,
            bicycle_with_or_without_reservation=None,
-           max_price=None):
+           max_price=None,
+           max_requests=10):
     t = Trainline()
 
     departure_station_id = get_station_id(departure_station)
@@ -594,9 +596,9 @@ def search(departure_station, arrival_station,
     folder_list = []
 
     search_date = from_date_obj
-
-    while True:
-
+    nb_requests = 0
+    while True and nb_requests < max_requests:
+        nb_requests+=1
         last_search_date = search_date
         departure_date = search_date.strftime(_DEFAULT_DATE_FORMAT)
 
@@ -753,6 +755,7 @@ def _get_segments(search_results_obj):
             "transportation_mean": segment.get("transportation_mean"),
             "carrier": segment.get("carrier"),
             "train_number": segment.get("train_number"),
+            "train_name": segment.get("train_name"),
             "travel_class": segment.get("travel_class"),
             "trip_id": segment.get("trip_id"),
             "comfort_class_ids": comfort_class_ids,
