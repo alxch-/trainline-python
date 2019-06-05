@@ -1,3 +1,5 @@
 requests>=2.6.0
 click>=6.7
 pytz>=2018.5
+fuzzywuzzy>=0.17.0
+python-Levenshtein>=0.12.0

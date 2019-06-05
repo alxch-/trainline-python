@@ -7,11 +7,16 @@ import requests
 from requests import ConnectionError
 import json
 from datetime import datetime, timedelta, date
+import logging
 import pytz
 import time
 import uuid
 import os
 import copy
+
+from fuzzywuzzy import process
+
+logger = logging.getLogger()
 
 __author__ = """Thibault Ducret"""
 __email__ = 'hello@tducret.com'
@@ -137,8 +142,10 @@ class Folder(object):
             "id": str,
             "departure_date": str,
             "departure_station_id": str,
+            "departure_station_name": str,
             "arrival_date": str,
             "arrival_station_id": str,
+            "arrival_station_name": str,
             "price": float,
             "currency": str,
             "trip_ids": list,
@@ -545,12 +552,12 @@ def get_station_id(station_name):
 
     if '_STATION_DB' not in globals():
         _STATION_DB = _station_to_dict(_STATIONS_CSV)
-
-    station_id = None
-    for st_id, st_name in _STATION_DB.items():
-        if st_name == station_name.lower().strip():
-            station_id = st_id
-            break
+    stripped_name = station_name.lower().strip()
+    station_id = _STATION_DB.get(stripped_name)
+    if station_id is None:
+        logger.info("%s not found, fallback on fuzzy matching", stripped_name)
+        found_name, score = process.extractOne(stripped_name, _STATION_DB.keys())
+        station_id = _STATION_DB.get(found_name)
 
     if station_id is None:
         raise KeyError("'{}' station has not been found".format(station_name))
@@ -649,6 +656,7 @@ origin_date_format="%d/%m/%Y %H:%M", target_date_format="%Y-%m-%dT%H:%M:%S%z"))
 def _get_folders(search_results_obj):
     """ Get folders from the json object of search results """
     trip_obj_list = _get_trips(search_results_obj)
+    stations_dict = {s["id"]: s["name"] for s in search_results_obj.get("stations", [])}
     folders = search_results_obj.get("folders")
     folder_obj_list = []
     for folder in folders:
@@ -656,8 +664,10 @@ def _get_folders(search_results_obj):
             "id": folder.get("id"),
             "departure_date": folder.get("departure_date"),
             "departure_station_id": folder.get("departure_station_id"),
+            "departure_station_name": stations_dict.get(folder.get("departure_station_id"), "unknown"),
             "arrival_date": folder.get("arrival_date"),
             "arrival_station_id": folder.get("arrival_station_id"),
+            "arrival_station_name": stations_dict.get(folder.get("arrival_station_id"), "unknown"),
             "price": float(folder.get("cents")) / 100,
             "currency": folder.get("currency"),
             "trip_ids": folder.get("trip_ids"),
@@ -908,5 +918,6 @@ def _station_to_dict(filename, csv_delimiter=';'):
     for line in csv_content.split("\n"):
         station_id = line.split(csv_delimiter)[0]
         station_name = csv_delimiter.join(line.split(csv_delimiter)[1:])
-        station_dict[station_id] = station_name
+        if station_name not in station_dict:
+            station_dict[station_name] = station_id
     return station_dict
