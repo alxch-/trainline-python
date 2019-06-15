@@ -14,6 +14,7 @@ import uuid
 import os
 import copy
 
+from aws_xray_sdk.core import xray_recorder
 from fuzzywuzzy import process
 
 logger = logging.getLogger()
@@ -548,7 +549,7 @@ def _fix_date_offset_format(date_str):
     """
     return date_str[:-3] + date_str[-2:]
 
-
+@xray_recorder.capture('get_station_id')
 def get_station_id(station_name):
     """ Returns the Trainline station id (mandatory for search) based on the
     stations csv file content, and the station_name passed in parameter """
@@ -568,7 +569,7 @@ def get_station_id(station_name):
 
     return station_id
 
-
+@xray_recorder.capture('search')
 def search(departure_station, arrival_station,
            from_date, to_date,
            passengers=[Passenger(birthdate=_DEFAULT_PASSENGER_BIRTHDATE)],
@@ -657,7 +658,7 @@ origin_date_format="%d/%m/%Y %H:%M", target_date_format="%Y-%m-%dT%H:%M:%S%z"))
                                              date_format=origin_date_format)
     return date_obj.strftime(target_date_format)
 
-
+@xray_recorder.capture('_get_folders')
 def _get_folders(search_results_obj):
     """ Get folders from the json object of search results """
     trip_obj_list = _get_trips(search_results_obj)
@@ -693,7 +694,7 @@ def _get_folders(search_results_obj):
         folder_obj_list.append(folder_obj)
     return folder_obj_list
 
-
+@xray_recorder.capture('_get_trips')
 def _get_trips(search_results_obj):
     """ Get trips from the json object of search results """
     segment_obj_list = _get_segments(search_results_obj)
@@ -736,7 +737,7 @@ def _get_trip_from_id(trip_obj_list, trip_id):
             break
     return found_trip_obj
 
-
+@xray_recorder.capture('_get_segments')
 def _get_segments(search_results_obj):
     """ Get segments from the json object of search results """
     comfort_class_obj_list = _get_comfort_classes(search_results_obj)
@@ -826,7 +827,7 @@ def _get_comfort_class_from_id(comfort_class_obj_list, comfort_class_id):
             break
     return found_comfort_class_obj
 
-
+@xray_recorder.capture('_filter_folders')
 def _filter_folders(folder_list, from_date_obj=None, to_date_obj=None,
                     min_price=0.0, max_price=None, transportation_mean=None,
                     min_segment_nb=1, max_segment_nb=None,
