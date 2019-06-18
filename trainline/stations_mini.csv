@@ -394,7 +394,6 @@
 605;mont-notre-dame
 606;fère-en-tardenois
 607;dormans
-608;aÿ
 609;avenay
 610;germaine
 611;rilly-la-montagne
@@ -1372,7 +1371,6 @@
 1996;fromentel
 1997;bellou-en-houlme centre
 1998;messei centre
-2000;massy
 2002;massy—palaiseau
 2004;la ferté-macé
 2006;avranches
@@ -6289,21 +6287,31 @@
 8682;nelas
 8685;viana do castelo
 8686;abrantes
+8689;figueira da foz
 8690;caldas da rainha
 8693;fátima
+8695;vila nova de gaia
 8696;lisboa santa apolónia
 8697;porto campanhã
 8698;barcelos
 8699;fundão
 8700;lagos
+8703;vila real de san antónio guad
 8704;beja
 8705;valença
 8707;celorico da beira
+8708;leiria
+8709;aveiro
+8710;braga
+8711;coimbra
+8712;castelo branco
+8714;covilhã
 8718;faro
 8720;guarda
 8721;lisboa
 8722;lisboa oriente
 8723;nine
+8725;régua
 8728;torres vedras
 8729;vilar formoso
 8737;aéroport de beauvais-tillé
@@ -21532,7 +21540,9 @@
 28594;zakopane
 28597;zgorzelec
 28599;albufeira
+28602;elvas
 28605;setúbal
+28608;tomar
 28610;arad
 28611;sibiu
 28612;sighișoara

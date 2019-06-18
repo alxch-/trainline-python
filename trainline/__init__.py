@@ -93,7 +93,7 @@ class Trainline(object):
 
     def __init__(self):
         pass
-
+    @xray_recorder.capture('trainline_search')
     def search(self, departure_station_id, arrival_station_id, departure_date,
                passenger_list):
         """ Search on Trainline """
@@ -562,6 +562,7 @@ def get_station_id(station_name):
     if station_id is None:
         logger.info("%s not found, fallback on fuzzy matching", stripped_name)
         found_name, score = process.extractOne(stripped_name, _STATION_DB.keys())
+        logger.info("found %s instead of %s", found_name, stripped_name)
         station_id = _STATION_DB.get(found_name)
 
     if station_id is None:
@@ -608,7 +609,8 @@ def search(departure_station, arrival_station,
             arrival_station_id=arrival_station_id,
             departure_date=departure_date,
             passenger_list=passenger_list)
-        j = json.loads(ret.text)
+        with xray_recorder.capture('json_loads') as subsegment:
+            j = json.loads(ret.text)
         folders = _get_folders(search_results_obj=j)
         folder_list += folders
 
@@ -919,7 +921,7 @@ def _read_file(filename):
 
 
 def _station_to_dict(filename, csv_delimiter=';'):
-    """ Returns the stations csv database as a dict <id>:<station_name> """
+    """ Returns the stations csv database as a dict <station_name>:<id> """
     csv_content = _read_file(filename)
     station_dict = {}
     for line in csv_content.split("\n"):
