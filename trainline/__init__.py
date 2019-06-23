@@ -5,7 +5,7 @@
 
 import requests
 from requests import ConnectionError
-import json
+import ujson as json
 from datetime import datetime, timedelta, date
 import logging
 import pytz
