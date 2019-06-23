@@ -131,7 +131,7 @@ class Trainline(object):
         post_data = json.dumps(data)
         c = Client()
         ret = c._post(url=_SEARCH_URL, post_data=post_data)
-        return ret
+        return ret.json()
 
 
 class Folder(object):
@@ -609,9 +609,7 @@ def search(departure_station, arrival_station,
             arrival_station_id=arrival_station_id,
             departure_date=departure_date,
             passenger_list=passenger_list)
-        with xray_recorder.capture('json_loads') as subsegment:
-            j = json.loads(ret.text)
-        folders = _get_folders(search_results_obj=j)
+        folders = _get_folders(search_results_obj=ret)
         folder_list += folders
 
         # Check the departure date of the last trip found
