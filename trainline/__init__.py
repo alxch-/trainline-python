@@ -77,7 +77,8 @@ class Client(object):
                 break
             else:
                 time.sleep(_TIME_AFTER_FAILED_REQUEST)
-
+        if ret.status_code == 429:
+            print(ret.headers)
         if (ret.status_code != expected_status_code):
             error_content=json.loads(ret.text)
             if error_content.get('code') == "no_results":
