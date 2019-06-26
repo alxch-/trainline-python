@@ -80,7 +80,11 @@ class Client(object):
         if ret.status_code == 429:
             print(ret.headers)
         if (ret.status_code != expected_status_code):
-            error_content=json.loads(ret.text)
+            try:
+                error_content = ret.json()
+            except json.decoder.JSONDecodeError as e:
+                print(ret.text)
+                raise Exception(e)
             if error_content.get('code') == "no_results":
                 raise ConnectionError("Aucun train trouvé.")
             raise ConnectionError(
