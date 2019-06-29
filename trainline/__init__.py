@@ -21,7 +21,7 @@ logger = logging.getLogger()
 
 __author__ = """Thibault Ducret"""
 __email__ = 'hello@tducret.com'
-__version__ = '0.0.8'
+__version__ = '0.0.9'
 
 _SEARCH_URL = "https://www.trainline.eu/api/v5_1/search"
 _DEFAULT_DATE_FORMAT = '%Y-%m-%dT%H:%M:%S%z'
@@ -323,7 +323,7 @@ price;currency;transportation_mean;bicycle_reservation\n"
 class Passenger(object):
     """ Class to represent a passenger """
 
-    def __init__(self, birthdate, cards=[]):
+    def __init__(self, birthdate, cards=None):
         self.birthdate = birthdate
         self.birthdate_obj = _str_date_to_date_obj(
             str_date=self.birthdate,
@@ -332,10 +332,11 @@ class Passenger(object):
 
         self.id = self._gen_id()
 
-        # for card in cards:
-        #     if card not in _AVAILABLE_CARDS:
-        #         raise KeyError("Card '{}' unknown, [{}] available".format(
-        #             card, ",".join(_AVAILABLE_CARDS)))
+        cards = cards or []
+        for card in cards:
+            if card not in _AVAILABLE_CARDS:
+                raise KeyError("Card '{}' unknown, [{}] available".format(
+                    card, ",".join(_AVAILABLE_CARDS)))
         self.cards = cards
 
     def _gen_id(self):
@@ -578,7 +579,7 @@ def get_station_id(station_name):
 @xray_recorder.capture('search')
 def search(departure_station, arrival_station,
            from_date, to_date,
-           passengers=[Passenger(birthdate=_DEFAULT_PASSENGER_BIRTHDATE)],
+           passengers=None,
            transportation_mean=None,
            bicycle_without_reservation_only=None,
            bicycle_with_reservation_only=None,
@@ -597,6 +598,8 @@ def search(departure_station, arrival_station,
         str_datetime=to_date, date_format=_READABLE_DATE_FORMAT)
 
     passenger_list = []
+    passengers = passengers or [Passenger(birthdate=_DEFAULT_PASSENGER_BIRTHDATE)]
+
     for passenger in passengers:
         passenger_list.append(passenger.get_dict())
 
