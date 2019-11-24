@@ -21,7 +21,7 @@ logger = logging.getLogger()
 
 __author__ = """Thibault Ducret"""
 __email__ = 'hello@tducret.com'
-__version__ = '0.0.9'
+__version__ = '0.1.1'
 
 _SEARCH_URL = "https://www.trainline.eu/api/v5_1/search"
 _DEFAULT_DATE_FORMAT = '%Y-%m-%dT%H:%M:%S%z'
@@ -35,8 +35,13 @@ ENFANT_PLUS = "SNCF.CarteEnfantPlus"
 JEUNE = "SNCF.Carte1225"
 WEEK_END = "SNCF.CarteEscapades"
 SENIOR = "SNCF.CarteSenior"
+AVANTAGE_FAMILLE = "SNCF.AvantageFamille"
+AVANTAGE_JEUNE = "SNCF.AvantageJeune"
+AVANTAGE_SENIOR = "SNCF.AvantageSenior"
+AVANTAGE_WEEK_END = "SNCF.AvantageWeekEnd"
 TGVMAX = {"reference": "SNCF.HappyCard", "number": None}
-_AVAILABLE_CARDS = [ENFANT_PLUS, JEUNE, WEEK_END, SENIOR]
+_AVAILABLE_CARDS = [ENFANT_PLUS, JEUNE, WEEK_END, SENIOR, AVANTAGE_FAMILLE,
+                    AVANTAGE_JEUNE, AVANTAGE_WEEK_END]
 _SPECIAL_CARDS = [TGVMAX]
 
 _DEFAULT_PASSENGER_BIRTHDATE = "01/01/1980"
@@ -52,7 +57,7 @@ class Client(object):
         self.session = requests.session()
         self.headers = {
             'Accept': 'application/json',
-            'User-Agent': 'CaptainTrain/43(4302) Android/4.4.2(19)',
+            'User-Agent': 'CaptainTrain/1574360965(web) (Ember 3.5.1)',
             'Accept-Language': 'fr',
             'Content-Type': 'application/json; charset=UTF-8',
             'Host': 'www.trainline.eu',
@@ -297,7 +302,7 @@ class Folders(object):
         csv_str = "departure_date;arrival_date;duration;number_of_segments;\
 price;currency;transportation_mean;bicycle_reservation\n"
         for folder in self.folders:
-            trip_duration = (folder.arrival_date_obj - folder.departure_date_obj)
+            trip_duration = folder.arrival_date_obj - folder.departure_date_obj
             csv_str += "{dep};{arr};{dur};{seg};{price};{curr};\
 {tr};{bicy}\n".format(
                 dep=folder.departure_date_obj.strftime(_READABLE_DATE_FORMAT),
@@ -349,7 +354,7 @@ class Passenger(object):
         born = self.birthdate_obj
         today = date.today()
         age = today.year - born.year - \
-              ((today.month, today.day) < (born.month, born.day))
+            ((today.month, today.day) < (born.month, born.day))
         return age
 
     def get_dict(self):
@@ -598,7 +603,8 @@ def search(departure_station, arrival_station,
         str_datetime=to_date, date_format=_READABLE_DATE_FORMAT)
 
     passenger_list = []
-    passengers = passengers or [Passenger(birthdate=_DEFAULT_PASSENGER_BIRTHDATE)]
+    passengers = passengers or [
+        Passenger(birthdate=_DEFAULT_PASSENGER_BIRTHDATE)]
 
     for passenger in passengers:
         passenger_list.append(passenger.get_dict())
