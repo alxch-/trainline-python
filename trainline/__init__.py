@@ -78,6 +78,9 @@ class Client(object):
             ret = self.session.post(url=url,
                                     headers=self.headers,
                                     data=post_data)
+            print(self.headers)
+            print(ret.headers)
+            print(ret.text)
             if (ret.status_code == expected_status_code):
                 break
             else:
