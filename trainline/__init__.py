@@ -62,9 +62,10 @@ class Client(object):
             'Content-Type': 'application/json; charset=UTF-8',
             'Host': 'www.trainline.eu',
         }
+        self.proxies = { "http": "http://91.236.239.149:3128", "https": "http://91.236.239.149:3128"}
 
     def _get(self, url, expected_status_code=200):
-        ret = self.session.get(url=url, headers=self.headers)
+        ret = self.session.get(url=url, headers=self.headers, proxies=self.proxies)
         if (ret.status_code != expected_status_code):
             raise ConnectionError(
                 'Status code {status} for url {url}\n{content}'.format(
@@ -77,7 +78,8 @@ class Client(object):
             trials += 1
             ret = self.session.post(url=url,
                                     headers=self.headers,
-                                    data=post_data)
+                                    data=post_data,
+                                    proxies=self.proxies)
             print(self.headers)
             print(ret.headers)
             print(ret.text)
