@@ -80,9 +80,6 @@ class Client(object):
                                     headers=self.headers,
                                     data=post_data,
                                     proxies=self.proxies)
-            print(self.headers)
-            print(ret.headers)
-            print(ret.text)
             if (ret.status_code == expected_status_code):
                 break
             else:
