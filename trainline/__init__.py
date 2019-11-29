@@ -62,7 +62,7 @@ class Client(object):
             'Content-Type': 'application/json; charset=UTF-8',
             'Host': 'www.trainline.eu',
         }
-        self.proxies = { "http": "http://91.236.239.149:3128", "https": "http://91.236.239.149:3128"}
+        self.proxies = { "http": "51.158.111.242:8811", "https": "51.158.111.242:8811"}
 
     def _get(self, url, expected_status_code=200):
         ret = self.session.get(url=url, headers=self.headers, proxies=self.proxies)
