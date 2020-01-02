@@ -134,8 +134,8 @@ class Trainline(object):
         data = {
             "local_currency": "EUR",
             "search": {
-                "passenger_ids": ["310423333"],
-                "card_ids": ["13403918"],
+                "passenger_ids": ["310712051"],
+                "card_ids": ["13456412"],
                 "arrival_station_id": arrival_station_id,
                 "departure_date": departure_date,
                 "departure_station_id": departure_station_id,
