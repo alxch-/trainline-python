@@ -64,11 +64,11 @@ class Client(object):
         self.session = requests.session()
         self.headers = {
             "authority": "www.trainline.fr",
-            "x-ct-client-id": "3a916760-825d-4107-ae7a-2e4010b4aa2c",
-            "x-user-agent": "CaptainTrain/1574947527(web) (Ember 3.5.1)",
+            "x-ct-client-id": "b141bf00-eae6-46f8-8486-4930eb1165ac",
+            "x-user-agent": "CaptainTrain/1579020204(web) (Ember 3.5.1)",
             "origin": "https://www.trainline.fr",
             "x-requested-with": "XMLHttpRequest",
-            "x-ct-timestamp": "1574947527",
+            "x-ct-timestamp": "1579020204",
             "accept-language": "fr-FR,fr;q=0.8",
             "authorization": 'Token token="{}"'.format(os.getenv("TRAINLINE_TOKEN")),
             "content-type": "application/json; charset=UTF-8",
@@ -134,8 +134,8 @@ class Trainline(object):
         data = {
             "local_currency": "EUR",
             "search": {
-                "passenger_ids": ["310712051"],
-                "card_ids": ["13456412"],
+                "passenger_ids": ["311094105"],
+                "card_ids": ["13524398"],
                 "arrival_station_id": arrival_station_id,
                 "departure_date": departure_date,
                 "departure_station_id": departure_station_id,
