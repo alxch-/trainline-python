@@ -189,6 +189,7 @@ class Folder(object):
             "currency": str,
             "trip_ids": list,
             "trips": list,
+            "is_sellable": bool
         }
 
         for expected_param, expected_type in expected.items():
@@ -232,12 +233,13 @@ class Folder(object):
         return repr(self)
 
     def __repr__(self):
-        return "[Folder] {} → {} : {} {} ({} trips) [id : {}]".format(
+        return "[Folder] {} → {} : {} {} ({} trips) (sellable: {}) [id : {}]".format(
             self.departure_date,
             self.arrival_date,
             self.price,
             self.currency,
             len(self.trip_ids),
+            self.is_sellable,
             self.id,
         )
 
@@ -459,7 +461,8 @@ class Segment(object):
             "carrier": str,
             "train_number": str,
             "train_name": str,
-            "travel_class": str,
+            # Need to comment travel class otherwise full trains don't appear
+            #"travel_class": str, 
             "trip_id": str,
             "comfort_class_ids": list,
             "comfort_classes": list,
@@ -775,6 +778,7 @@ def _get_folders(search_results_obj):
             "price": float(folder.get("cents")) / 100,
             "currency": folder.get("currency"),
             "trip_ids": folder.get("trip_ids"),
+            "is_sellable": folder.get("is_sellable")
         }
         trips = []
         for trip_id in dict_folder["trip_ids"]:
