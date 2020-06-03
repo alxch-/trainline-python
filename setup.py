@@ -14,10 +14,15 @@ _KEYWORDS = ['api', 'trainline', 'parsing', 'train', 'sncf',
 _SCRIPTS = ['trainline_cli.py']
 _PACKAGE_DATA = ['stations_mini.csv']
 
-HERE = os.path.abspath(os.path.dirname(__file__))
-reqs_path = HERE + "/requirements.txt"
-with open(reqs_path) as reqs_file:
-    requirements = reqs_file.read().splitlines()
+ROOT_DIR = os.path.dirname(os.path.realpath(__file__))
+
+def parse_requirements(filepath):
+    """ load requirements from a pip requirements file. """
+    with open(filepath) as f:
+        lines = (line.strip() for line in f)
+        return [line for line in lines if line and not line.startswith('#')]
+
+requirements = parse_requirements(os.path.join(ROOT_DIR, 'requirements.txt'))
 
 setup(
     name=_PACKAGE_NAME,
