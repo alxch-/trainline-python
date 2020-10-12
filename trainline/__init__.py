@@ -64,11 +64,11 @@ class Client(object):
         self.session = requests.session()
         self.headers = {
             "authority": "www.trainline.fr",
-            "x-ct-client-id": "b141bf00-eae6-46f8-8486-4930eb1165ac",
-            "x-user-agent": "CaptainTrain/1579020204(web) (Ember 3.5.1)",
+            "x-ct-client-id": "6d5fe1be-7daa-4f6d-a425-cdc3fa2413cd",
+            "x-user-agent": "CaptainTrain/1602172626(web) (Ember 3.8.3)",
             "origin": "https://www.trainline.fr",
             "x-requested-with": "XMLHttpRequest",
-            "x-ct-timestamp": "1579020204",
+            "x-ct-timestamp": "1602172626",
             "accept-language": "fr-FR,fr;q=0.8",
             "authorization": 'Token token="{}"'.format(os.getenv("TRAINLINE_TOKEN")),
             "content-type": "application/json; charset=UTF-8",
@@ -76,7 +76,7 @@ class Client(object):
             "x-not-a-bot": "i-am-human",
             "x-ct-locale": "fr",
             "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36",
-            "x-ct-version": "7f9e3876540921879f3e3322c2c970372cb1e2ac",
+            "x-ct-version": "c5b880a07cbc9199cff243453d29bb563acd56c5",
             "sec-fetch-site": "same-origin",
             "sec-fetch-mode": "cors",
             "referer": "https://www.trainline.fr/search/paris/marseille/2019-11-30-18:00",
@@ -134,8 +134,8 @@ class Trainline(object):
         data = {
             "local_currency": "EUR",
             "search": {
-                "passenger_ids": ["311094105"],
-                "card_ids": ["13524398"],
+                "passenger_ids": ["314655534"],
+                "card_ids": ["14080422"],
                 "arrival_station_id": arrival_station_id,
                 "departure_date": departure_date,
                 "departure_station_id": departure_station_id,
